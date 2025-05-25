@@ -16,14 +16,14 @@ tasa_hipoteca = st.sidebar.slider("Tasa de interés hipotecario (% anual)", 1.0,
 pago_inicial_porcentaje = st.sidebar.slider("Pago inicial (% del precio)", 10, 50, 20)
 inflacion_alquiler = st.sidebar.slider("Inflación anual del alquiler (%)", 0.0, 5.0, 3.0, step=0.1)
 revalorizacion_casa = st.sidebar.slider("Revalorización anual de la casa (%)", 0.0, 5.0, 2.0, step=0.1)
-costos_compra_porcentaje = st.sidebar.slider("Costos de compra (% del precio)", 5, 20, 12)
+costos_iniciales_porcentaje = st.sidebar.slider("Costos iniciales de compra (% del precio)", 5, 20, 12)
 
 # Checkbox para compra al 50%
 compra_compartida = st.sidebar.checkbox("¿Compra al 50% con otra persona?", value=False)
 
 # Cálculos
 pago_inicial = precio_casa * (pago_inicial_porcentaje / 100)
-costos_compra = precio_casa * (costos_compra_porcentaje / 100)
+costos_iniciales_compra = precio_casa * (costos_iniciales_porcentaje / 100)
 monto_hipoteca = precio_casa - pago_inicial
 tasa_mensual = tasa_hipoteca / 100 / 12
 n_meses = anos * 12
@@ -32,7 +32,7 @@ n_meses = anos * 12
 pago_mensual_hipoteca = monto_hipoteca * (tasa_mensual * (1 + tasa_mensual)**n_meses) / ((1 + tasa_mensual)**n_meses - 1)
 if compra_compartida:
     pago_inicial = pago_inicial / 2
-    costos_compra = costos_compra / 2
+    costos_iniciales_compra = costos_iniciales_compra / 2
     pago_mensual_hipoteca = pago_mensual_hipoteca / 2
 
 # Costos acumulados
@@ -51,7 +51,7 @@ for i in range(anos):
     # Compra: hipoteca + costos iniciales en el primer año
     costo_anual_compra = pago_mensual_hipoteca * 12
     if i == 0:
-        costo_anual_compra += pago_inicial + costos_compra
+        costo_anual_compra += pago_inicial + costos_iniciales_compra
     costos_compra.append(costo_anual_compra)
     
     # Valor de la casa con revalorización
